@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  overpass:
+    image: wiktorn/overpass-api
+    container_name: overpass
+    environment:
+      OVERPASS_MODE: init
+      # replace this
+      OVERPASS_PLANET_URL: https://download.geofabrik.de/europe/germany/hessen-latest.osm.bz2
+    volumes:
+      - ./overpass-data:/db
+    ports:
+      - 5051:80
+
+  overpass-turbo:
+    image: cvolkmann/overpass-turbo
+    ports:
+      - 5050:80
+
+  nominatim:
+    image: mediagis/nominatim:3.7
+    environment:
+      # replace these
+      PBF_URL: https://download.geofabrik.de/europe/germany/hessen-latest.osm.pbf
+      REPLICATION_URL: http://download.geofabrik.de/europe/germany/hessen-updates/
+      IMPORT_WIKIPEDIA: "false"
+      # this is just anything random
+      NOMINATIM_PASSWORD: 9hF6t678qt3f456hxz847we5f6
+    ports:
+      - 5060:8080
+    volumes:
+      - ./nominatim-data:/nominatim/data
